@@ -1,8 +1,10 @@
 import ProfileHeaderOption, { ProfileHeaderOptionProps } from "./ProfileHeaderOption";
 
 const profileHeaderOptions = [
-  { id: "1", iconsrc: "/home_icon.svg", iconalt: "home" },
-  { id: "2", iconsrc: "/msg_icon.svg", iconalt: "message" }
+  { id: "1", iconsrc: "/home_icon.svg", iconalt: "home", title: "Home"},
+  { id: "2", iconsrc: "/msg_icon.svg", iconalt: "message", title: "Messages" },
+  { id: "3", iconsrc: "/notification_icon.svg", iconalt: "notification", title: "Notifications" },
+  { id: "4", iconsrc: "/yogesh_profile.jpeg", iconalt: "profile_name", title: "Yogesh" }
 ];
 
 const Header = () => {
@@ -30,11 +32,13 @@ const Header = () => {
       <ProfileHeaderOption {...option} key={index} />
     );
   }
-
+  
+  // To stick the header to the top and allow scrolling of the app body without moving the header,
+  // we make the header position sticky and top as 0
   return (
     <div 
       id="header"
-      className="py-1 px-5 border-gray-400 border-2 w-screen flex flex-row justify-between h-12"
+      className="py-1 px-5 border-b-gray-300 border w-screen flex flex-row justify-around h-12 sticky top-0 z-50"
     >
       <div 
         id="search_header"
