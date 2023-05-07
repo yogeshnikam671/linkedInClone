@@ -23,7 +23,7 @@ const ProfileHeaderOption = ({
       <img
         src={iconsrc}
         alt={iconalt}
-        className="h-3/5 self-center"
+        className="h-3/5 self-center rounded-full"
       />
       <div
         id={profileTitleId}
