@@ -25,7 +25,7 @@ const ProfileStats = ({
   
   const profileStat = (stat: ProfileStat, index: number) : any => {
     return (
-      <div className="flex justify-between w-full mt-1" key={index}>
+      <div className="flex justify-between w-full p-2 cursor-pointer hover:bg-gray-200" key={index}>
         <div className="text-gray-500 font-bold text-sm w-full">{stat.displayName}</div>
         <div className="text-blue-500 font-bold text-sm w-1/2">
           {stat.value}
