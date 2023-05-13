@@ -39,7 +39,7 @@ const Header = () => {
   return (
     <div 
       id="header"
-      className="py-1 px-5 border-b-gray-300 border w-screen flex flex-row justify-around h-12 sticky top-0 z-50"
+      className="py-1 px-5 border-b-gray-300 border w-screen flex flex-row justify-around h-12 sticky top-0 z-50 bg-white"
     >
       <div 
         id="search_header"

@@ -16,7 +16,7 @@ const Post = ({
 
   return (
     <div
-      className="h-fit w-full border border-gray-300 rounded-xl p-3"
+      className="h-fit w-full border border-gray-300 rounded-xl p-3 mb-5"
     >
       <PostProfileInfo 
         imgSrc={imgSrc}
