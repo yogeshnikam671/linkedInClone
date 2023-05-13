@@ -18,7 +18,7 @@ const ProfileHeaderOption = ({
     <div
       id={profileHeaderOptionId}
       key={id}
-      className="flex flex-col justify-between w-fit px-2 text-gray-400 hover:text-black cursor-pointer"
+      className="flex flex-col justify-between w-fit px-2 text-gray-500 hover:text-black cursor-pointer"
     >
       <img
         src={iconsrc}
@@ -28,7 +28,7 @@ const ProfileHeaderOption = ({
       <div
         id={profileTitleId}
         key={profileTitleId}
-        className="text-sm font-bold"
+        className="text-sm"
       >
         {title}
       </div>

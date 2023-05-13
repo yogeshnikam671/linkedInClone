@@ -17,11 +17,11 @@ const Header = () => {
       >
         <img
           src="/search_icon.svg"
-          className="h-5 self-center pr-2"
+          className="h-4 self-center pr-2"
         />
         <input
           type="text"
-          className="outline-none text-black bg-stone-200 h-full"
+          className="outline-none text-black bg-stone-200 h-full w-52"
         />
       </div>
     );
@@ -47,7 +47,7 @@ const Header = () => {
         <img 
           src="/linkedin_icon.svg" 
           alt="linked-in"
-          className="pr-5"
+          className="pr-5 h-9"
         />
         { renderSearchBar() }
       </div>
