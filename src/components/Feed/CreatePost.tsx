@@ -10,7 +10,9 @@ const CreatePost = () => {
   const renderPostTypes = () => {
     return postTypes.map((postType, index) => {
       return (
-        <div className="flex items-center" key={`post-type-${index}`}>
+        <div 
+          className="flex items-center cursor-pointer hover:bg-gray-100 py-4 px-2 rounded-md"
+          key={`post-type-${index}`}>
           <img
             src={postType.icon}
             alt={postType.alt}
@@ -24,9 +26,11 @@ const CreatePost = () => {
     })
   }
 
+  const placeholderStyles = "placeholder:font-bold placeholder:text-gray-500 placeholder:text-sm";
+
   return (
     <div
-      className="flex flex-col h-full border border-gray-300 rounded-2xl p-5"
+      className="flex flex-col h-full border border-gray-300 rounded-2xl px-5 py-4"
     >
       <div
         className="flex flex-row items-center h-1/4 w-full pb-4"
@@ -43,7 +47,7 @@ const CreatePost = () => {
             type="text"
             aria-label="Start a post"
             placeholder="Start a post"
-            className="placeholder:font-bold placeholder:text-gray-500 placeholder:text-sm w-full"
+            className={`${placeholderStyles} w-full focus:placeholder:opacity-0 outline-none`}
           />
         </div>
       </div>
