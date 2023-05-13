@@ -38,7 +38,7 @@ const SideBar = () => {
   // Explore this thing once later.
   const render = () => {
     return (
-      <div className="h-fit w-1/5 mt-5">
+      <div className="h-fit flex-[0.2] mr-5">
         <SideBarProfile sideBarItemsStyle={sideBarItemsStyle} />
         <br />
         {sideBarContent()}
