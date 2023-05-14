@@ -17,7 +17,7 @@ const PostProfileInfo = ({
       <img
           src={imgSrc}
           alt="sidebar_profile_pic"
-          className="rounded-full mr-3 h-12"
+          className="rounded-full mr-3 h-12 w-12"
         />
       <div>
         <p className="font-bold text-md">{name}</p>
