@@ -6,6 +6,7 @@ import Post, { PostPropsType } from "./Post";
 const Feed = () => {
   
   const [posts, setPosts] = useState<Array<PostPropsType> | null>(null);
+  const [isNewPostCreated, setIsNewPostCreated] = useState<boolean>(false);
   
   const fetchAllPosts = async () => {
     const fetchedPosts = await fetchPosts();
@@ -16,6 +17,13 @@ const Feed = () => {
     fetchAllPosts();
   }, []);
 
+  useEffect(() => {
+    if(isNewPostCreated) {
+      fetchAllPosts();
+      setIsNewPostCreated(false);
+    }
+  }, [isNewPostCreated]);
+
   const renderPosts = () => {
     if(!posts) return [];
     return posts.map(post => <Post {...post}/>);
@@ -25,7 +33,8 @@ const Feed = () => {
     <div
       className="h-fit w-full flex-[0.5]"
     >
-      <CreatePost/>
+      <CreatePost
+        setIsNewPostCreated={setIsNewPostCreated} />
       <div className="mt-10">
         {renderPosts()}
       </div>
