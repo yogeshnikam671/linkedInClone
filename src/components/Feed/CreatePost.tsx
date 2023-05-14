@@ -26,17 +26,18 @@ const CreatePost = ({
   setIsNewPostCreated
 }: CreatePostProps) => {
 
-  const post = useRef<string>("");
+  const [post, setPost] = useState<string>("");
   
   const onCreatePostInputKeyDown = async (e) => {
     if(e.code === "Enter") {
-      await createPost(dummyPost(post.current));
+      await createPost(dummyPost(post));
       setIsNewPostCreated(true);
+      setPost("");
     }
   }
 
   const onCreatePostInputOnChange = (e) => {
-    post.current = e.target.value;
+    setPost(e.target.value);
   }
 
   const render = () => {
@@ -81,6 +82,7 @@ const CreatePost = ({
               aria-label="Start a post"
               placeholder="Start a post"
               className={`${placeholderStyles} w-full focus:placeholder:opacity-0 outline-none`}
+              value={post}
               onKeyDown={onCreatePostInputKeyDown}
               onChange={onCreatePostInputOnChange}
             />
