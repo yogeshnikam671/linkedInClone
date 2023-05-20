@@ -26,7 +26,7 @@ const Feed = () => {
 
   const renderPosts = () => {
     if(!posts) return [];
-    return posts.map(post => <Post {...post}/>);
+    return posts.map((post, index) => <Post {...post} key={`post-${index}`}/>);
   }
 
   return posts && (

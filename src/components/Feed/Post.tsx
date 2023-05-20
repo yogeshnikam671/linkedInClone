@@ -20,11 +20,13 @@ const Post = ({
   
   const renderPostActions = () => {
     return postActions.map((action, index) => (
-      <div className="flex cursor-pointer px-6 py-2 rounded-md hover:bg-gray-100">
+      <div 
+        className="flex cursor-pointer px-6 py-2 rounded-md hover:bg-gray-100"
+        key={`post-action-${index}`}
+      >
         <img
           src={`/post_icons/${action}.svg`}
           alt={`post-action-${action}`}
-          key={`post-action-${index}`}
           className="h-6 mr-2"
         />
         <p>
