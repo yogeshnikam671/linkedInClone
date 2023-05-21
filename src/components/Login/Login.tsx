@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { SignInCreds, login } from "../../api/auth/login";
 import { IdTokenResult } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { storeLoginDetails } from "../../store/actions/auth";
 
 interface LoginInputPropsType {
   type: string,
@@ -16,9 +18,14 @@ const loginInputProps: Array<LoginInputPropsType> = [
   { type: "password", placeholder: "Enter password", id: "password", name: "password" },
 ]
 
+// TODO - refactor this to have a local state for authToken and dispatch the reducer state only when
+// sign in  button is clicked.
+// 2. STORE the authToken in the local storage as well.
 const Login = () => {
   
-  const [authToken, setAuthToken] = useState<IdTokenResult | null | undefined>(undefined);
+  const dispatch = useDispatch();
+  const authToken = useSelector((state: any) => state.auth?.authToken);
+  const setAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
 
   const loginWith = async (signInCreds: SignInCreds) => {
     const loginToken = await login(signInCreds);
@@ -34,7 +41,7 @@ const Login = () => {
   }
 
   const onInputChange = () => {
-    setAuthToken(undefined); 
+    setAuthToken(undefined);
   }
 
   const render = () => {
@@ -51,7 +58,7 @@ const Login = () => {
     }
 
     return (
-      <div className="m-auto h-72 w-1/4 flex flex-col justify-evenly text-lg">
+      <div className="m-auto h-72 w-80 flex flex-col justify-evenly text-lg">
         <img
           src="/linked_in_login_image.png"
           alt="linked_in_login_image"

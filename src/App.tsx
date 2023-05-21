@@ -1,39 +1,19 @@
+import { configureStore } from '@reduxjs/toolkit'
 import './App.css'
-import Feed from './components/Feed/Feed'
-import Header from './components/Header/Header'
-import Login from './components/Login/Login'
-import SideBar from './components/SideBar/SideBar'
+import { reducer } from './store/reducers/reducer'
+import { Provider } from 'react-redux'
+import Home from './Home'
 
 function App() {
-  
-  const user = undefined;
+  const store = configureStore({
+   reducer: reducer
+  });
 
-  const render = () => {
-    const renderLoggedInSession = () => {
-      return (<>
-        <SideBar />
-        <Feed />
-        {/* <Widgets/> */}
-      </>);
-    }
-
-    const renderLogin = () => {
-      return (<>
-        <Login/>
-      </>);
-    }
-
-    return (
-      <>
-        <Header />
-        <div className="ml-[15%] mr-[15%] flex mt-8">
-          {user ? renderLoggedInSession() : renderLogin()}
-        </div>
-      </>
-    )
-  }
-
-  return render();  
+  return (
+    <Provider store={store}>
+      <Home/>
+    </Provider>
+  );  
 }
 
 export default App
