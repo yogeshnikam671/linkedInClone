@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { createPost } from "../../api/posts/createPost";
-import { PostPropsType } from "./Post";
 import { UserProfile } from "../../api/profile/fetchProfile";
 import { useSelector } from "react-redux";
 
@@ -15,15 +14,6 @@ const postTypes = [
   { name: "Write article", icon: "/create_post_icons/article.svg", alt: "create_article" }
 ];
 
-const dummyPost = (content: string): PostPropsType => {
-  return {
-    imgSrc: "/yogesh_profile_sidebar.jpeg",
-    name: "Yogesh Nikam",
-    description: "Full Stack Developer",
-    content
-  }
-}
-
 const CreatePost = ({
   setIsNewPostCreated
 }: CreatePostProps) => {
@@ -32,8 +22,13 @@ const CreatePost = ({
   const [post, setPost] = useState<string>("");
   
   const onCreatePostInputKeyDown = async (e) => {
-    if(e.code === "Enter") {
-      await createPost(dummyPost(post));
+    if (e.code === "Enter") {
+      await createPost({
+        imgSrc: userProfile.profileImageSrc,
+        name: userProfile.name,
+        description: userProfile.bio,
+        content: post
+      });
       setIsNewPostCreated(true);
       setPost("");
     }
@@ -75,7 +70,7 @@ const CreatePost = ({
           <img
             src={userProfile.profileImageSrc}
             alt="sidebar_profile_pic"
-            className="rounded-full mr-3 h-12"
+            className="rounded-full mr-3 h-12 w-12"
           />
           <div
             className="border border-gray-400 p-3 rounded-full w-full"

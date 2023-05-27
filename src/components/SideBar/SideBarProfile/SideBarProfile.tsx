@@ -28,7 +28,7 @@ const SideBarProfile = ({
           <img
             src={userProfile.profileImageSrc}
             alt="sidebar_profile_pic"
-            className="rounded-full mb-2"
+            className="rounded-full mb-2 h-[6rem] w-[6rem]"
           />
           <div className="text-md font-semibold hover:underline cursor-pointer text-center">
             {userProfile.name}
