@@ -8,11 +8,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { sessionStorageItem } from './constants/sessionStorageItem'
 import { IdTokenResult } from 'firebase/auth'
 import { storeLoginDetails } from './store/actions/auth'
+import { UserProfile, fetchProfile } from './api/profile/fetchProfile'
+import { storeUserDetails } from './store/actions/user'
 
 const Home = () => {
 
   const dispatch = useDispatch();
   const storeAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
+  const storeUserProfile = (user: UserProfile) => dispatch(storeUserDetails(user));
+
   const authTokenFromStore = useSelector((state: any) => state.auth?.authToken);
   
   const [authToken, setAuthToken] = useState<IdTokenResult | null | undefined>();
@@ -22,13 +26,13 @@ const Home = () => {
     setAuthToken(null);
   }
 
-  useEffect(() => {
-    if(authTokenFromStore) {
+  const handleUserAuthSession = () => {
+    if (authTokenFromStore) {
       setAuthToken(authTokenFromStore);
       return;
     }
     const sessionStorageTokenString = sessionStorage.getItem(sessionStorageItem.authToken);
-    if(!sessionStorageTokenString) {
+    if (!sessionStorageTokenString) {
       expireUserSession();
       return;
     }
@@ -41,7 +45,23 @@ const Home = () => {
       storeAuthToken(loginToken);
       setAuthToken(loginToken);
     }
+  }
+
+  const fetchUserProfile = async (email: string) => {
+      const user = await fetchProfile(email);
+      if(user === null) expireUserSession();
+      storeUserProfile(user as UserProfile);
+  }
+
+  useEffect(() => {
+    handleUserAuthSession();    
   }, [authTokenFromStore]);
+
+  useEffect(() => {
+    if(authToken) {
+      fetchUserProfile(authToken.claims.email);
+    }
+  }, [authToken])
 
   const render = () => {
     const renderLoggedInSession = () => {

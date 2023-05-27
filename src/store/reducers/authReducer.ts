@@ -1,6 +1,6 @@
 
 // TODO - move this to somewhere else
-interface Action {
+export interface Action {
   type: string,
   payload: any
 }
