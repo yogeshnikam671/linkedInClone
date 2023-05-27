@@ -26,10 +26,10 @@ const SideBarProfile = ({
             alt="sidebar_profile_pic"
             className="rounded-full mb-2"
           />
-          <div className="text-md font-semibold hover:underline cursor-pointer">
+          <div className="text-md font-semibold hover:underline cursor-pointer text-center">
             Yogesh Nikam
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 text-center">
             Full Stack Application Developer
           </div>
         </div>

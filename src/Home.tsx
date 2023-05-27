@@ -4,25 +4,42 @@ import Feed from './components/Feed/Feed'
 import Header from './components/Header/Header'
 import Login from './components/Login/Login'
 import SideBar from './components/SideBar/SideBar'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { sessionStorageItem } from './constants/sessionStorageItem'
 import { IdTokenResult } from 'firebase/auth'
+import { storeLoginDetails } from './store/actions/auth'
 
 const Home = () => {
+
+  const dispatch = useDispatch();
+  const storeAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
   const authTokenFromStore = useSelector((state: any) => state.auth?.authToken);
   
   const [authToken, setAuthToken] = useState<IdTokenResult | null | undefined>();
 
+  const expireUserSession = () => {
+    storeAuthToken(undefined);
+    setAuthToken(null);
+  }
+
   useEffect(() => {
-    const sessionStorageTokenString = sessionStorage.getItem(sessionStorageItem.authToken);
     if(authTokenFromStore) {
       setAuthToken(authTokenFromStore);
+      return;
     }
-    else if(sessionStorageTokenString) {
-      const loginToken = JSON.parse(sessionStorageTokenString);
-      const isTokenExpired = new Date() > new Date(loginToken.expirationTime);
-      if(isTokenExpired) setAuthToken(null);
-      else setAuthToken(loginToken);
+    const sessionStorageTokenString = sessionStorage.getItem(sessionStorageItem.authToken);
+    if(!sessionStorageTokenString) {
+      expireUserSession();
+      return;
+    }
+    const loginToken = JSON.parse(sessionStorageTokenString);
+    const isTokenExpired = new Date() > new Date(loginToken.expirationTime);
+    if (isTokenExpired) {
+      expireUserSession();
+    }
+    else {
+      storeAuthToken(loginToken);
+      setAuthToken(loginToken);
     }
   }, [authTokenFromStore]);
 

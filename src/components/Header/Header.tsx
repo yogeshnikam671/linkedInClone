@@ -1,14 +1,47 @@
+import { useDispatch, useSelector } from "react-redux";
 import ProfileHeaderOption, { ProfileHeaderOptionProps } from "./ProfileHeaderOption";
+import { IdTokenResult, signOut } from "firebase/auth";
+import { storeLoginDetails } from "../../store/actions/auth";
+import { fireAuth } from "../../api/config";
+import { MouseEventHandler } from "react";
+import { sessionStorageItem } from "../../constants/sessionStorageItem";
 
 const profileHeaderOptions = [
   { id: "1", iconsrc: "/home_icon.svg", iconalt: "home", title: "Home"},
   { id: "2", iconsrc: "/msg_icon.svg", iconalt: "message", title: "Messages" },
   { id: "3", iconsrc: "/notification_icon.svg", iconalt: "notification", title: "Notifications" },
-  { id: "4", iconsrc: "/yogesh_profile.jpeg", iconalt: "profile_name", title: "Yogesh" }
+  { id: "4", iconsrc: "/yogesh_profile.jpeg", iconalt: "profile_name", title: "Yogesh" },
+  { id: "5", iconsrc: "/sign_out.svg", iconalt: "sign_out", title: "Sign out"}  
 ];
 
+const onSignOut = async (storeAuthToken: Function) => {
+  await signOut(fireAuth);
+  sessionStorage.setItem(sessionStorageItem.authToken, '');
+  storeAuthToken(undefined);
+}
+
+const getHiddenValueFor = (
+  profileHeaderOption: ProfileHeaderOptionProps,
+  authToken: IdTokenResult | null | undefined
+): boolean => {
+  if(profileHeaderOption.title === "Sign out") return !authToken;
+  else return false;
+}
+
+const getOnClickHandlerFor = ({
+  profileHeaderOption,
+  storeAuthToken
+}: { profileHeaderOption: ProfileHeaderOptionProps, storeAuthToken: Function } ): MouseEventHandler<any> => {
+  if(profileHeaderOption.title === "Sign out") return () => onSignOut(storeAuthToken);
+  return () => {};
+}
+
 const Header = () => {
-  
+  const dispatch = useDispatch();
+  const storeAuthToken = (authToken: (IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
+
+  const authToken = useSelector((state: any) => state.auth?.authToken);
+
   const renderSearchBar = () => {
     return (
       <div
@@ -29,9 +62,14 @@ const Header = () => {
   }
 
   const renderProfileHeaderOptions = () => {
-    return profileHeaderOptions.map((option: ProfileHeaderOptionProps, index: number) => 
-      <ProfileHeaderOption {...option} key={index} />
-    );
+    return profileHeaderOptions.map((option: ProfileHeaderOptionProps, index: number) => {
+      const updatedOption = {
+        ...option,
+        hidden: getHiddenValueFor(option, authToken),
+        onClick: getOnClickHandlerFor({ profileHeaderOption: option, storeAuthToken })
+      }
+      return <ProfileHeaderOption {...updatedOption} key={index} />
+    });
   }
   
   // To stick the header to the top and allow scrolling of the app body without moving the header,
