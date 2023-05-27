@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchPosts } from "../../api/posts/fetchPosts";
+import { fetchPostsOnChange } from "../../api/posts/fetchPosts";
 import CreatePost from "./CreatePost";
 import Post, { PostPropsType } from "./Post";
 
@@ -9,8 +9,7 @@ const Feed = () => {
   const [isNewPostCreated, setIsNewPostCreated] = useState<boolean>(false);
   
   const fetchAllPosts = async () => {
-    const fetchedPosts = await fetchPosts();
-    setPosts(fetchedPosts);
+    fetchPostsOnChange(setPosts);
   }
   
   useEffect(() => {
