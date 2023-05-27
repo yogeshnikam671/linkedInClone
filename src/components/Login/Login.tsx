@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SignInCreds, login } from "../../api/auth/login";
 import { IdTokenResult } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { storeLoginDetails } from "../../store/actions/auth";
+import { sessionStorageItem } from "../../constants/sessionStorageItem";
 
 interface LoginInputPropsType {
   type: string,
@@ -18,17 +19,17 @@ const loginInputProps: Array<LoginInputPropsType> = [
   { type: "password", placeholder: "Enter password", id: "password", name: "password" },
 ]
 
-// TODO - refactor this to have a local state for authToken and dispatch the reducer state only when
-// sign in  button is clicked.
-// 2. STORE the authToken in the local storage as well.
 const Login = () => {
   
   const dispatch = useDispatch();
-  const authToken = useSelector((state: any) => state.auth?.authToken);
-  const setAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
+  const storeAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
+
+  const [authToken, setAuthToken] = useState(useSelector((state: any) => state.auth?.authToken));
 
   const loginWith = async (signInCreds: SignInCreds) => {
     const loginToken = await login(signInCreds);
+    sessionStorage.setItem(sessionStorageItem.authToken, JSON.stringify(loginToken));
+    storeAuthToken(loginToken);
     setAuthToken(loginToken);
   }
 
