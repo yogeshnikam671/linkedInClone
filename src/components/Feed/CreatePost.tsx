@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createPost } from "../../api/posts/createPost";
 import { PostPropsType } from "./Post";
+import { UserProfile } from "../../api/profile/fetchProfile";
+import { useSelector } from "react-redux";
 
 interface CreatePostProps {
  setIsNewPostCreated: Function
@@ -26,6 +28,7 @@ const CreatePost = ({
   setIsNewPostCreated
 }: CreatePostProps) => {
 
+  const userProfile: UserProfile = useSelector((state: any) => state.user?.profile);
   const [post, setPost] = useState<string>("");
   
   const onCreatePostInputKeyDown = async (e) => {
@@ -70,7 +73,7 @@ const CreatePost = ({
           className="flex flex-row items-center h-1/4 w-full pb-4"
         >
           <img
-            src="/yogesh_profile_sidebar.jpeg"
+            src={userProfile.profileImageSrc}
             alt="sidebar_profile_pic"
             className="rounded-full mr-3 h-12"
           />
