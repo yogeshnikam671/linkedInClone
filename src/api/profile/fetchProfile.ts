@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { fireDb } from "../config";
 
+// TODO - move all the interfaces in the codebase to models/interfaces folder.
 export interface UserProfile {
   name: string,
   bio: string,
