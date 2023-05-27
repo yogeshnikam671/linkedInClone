@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { UserProfile } from "../../../api/profile/fetchProfile";
 import ProfileStats from "./ProfileStats";
 
 
@@ -8,6 +10,8 @@ interface SideBarProfileProps {
 const SideBarProfile = ({
   sideBarItemsStyle
 }: SideBarProfileProps) => {
+
+  const userProfile: UserProfile = useSelector((state: any) => state.user?.profile);
 
   const render = () => {
     const renderProfileDetails = () => {
@@ -22,15 +26,15 @@ const SideBarProfile = ({
         >
 
           <img
-            src="/yogesh_profile_sidebar.jpeg"
+            src={userProfile.profileImageSrc}
             alt="sidebar_profile_pic"
             className="rounded-full mb-2"
           />
           <div className="text-md font-semibold hover:underline cursor-pointer text-center">
-            Yogesh Nikam
+            {userProfile.name}
           </div>
           <div className="text-sm text-gray-600 text-center">
-            Full Stack Application Developer
+            {userProfile.bio}
           </div>
         </div>
       </>);

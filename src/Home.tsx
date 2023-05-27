@@ -18,6 +18,7 @@ const Home = () => {
   const storeUserProfile = (user: UserProfile) => dispatch(storeUserDetails(user));
 
   const authTokenFromStore = useSelector((state: any) => state.auth?.authToken);
+  const userProfile: UserProfile = useSelector((state: any) => state.user?.profile);
   
   const [authToken, setAuthToken] = useState<IdTokenResult | null | undefined>();
 
@@ -73,7 +74,7 @@ const Home = () => {
     }
 
     const renderLogin = () => {
-      return (<>
+      return (!authToken) && (<>
         <Login/>
       </>);
     }
@@ -82,7 +83,7 @@ const Home = () => {
       <>
         <Header />
         <div className="ml-[15%] mr-[15%] flex mt-8">
-          {authToken ? renderLoggedInSession() : renderLogin()}
+          {(authToken && userProfile) ? renderLoggedInSession() : renderLogin()}
         </div>
       </>
     )
