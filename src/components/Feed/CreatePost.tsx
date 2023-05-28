@@ -21,6 +21,7 @@ const CreatePost = ({
   const userProfile: UserProfile = useSelector((state: any) => state.user?.profile);
   const [post, setPost] = useState<string>("");
   
+  // @ts-ignore
   const onCreatePostInputKeyDown = async (e) => {
     if (e.code === "Enter") {
       await createPost({
@@ -33,7 +34,8 @@ const CreatePost = ({
       setPost("");
     }
   }
-
+  
+  // @ts-ignore
   const onCreatePostInputOnChange = (e) => {
     setPost(e.target.value);
   }

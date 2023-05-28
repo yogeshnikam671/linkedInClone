@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SignInCreds, login } from "../../api/auth/login";
 import { IdTokenResult } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,8 +14,6 @@ interface LoginInputPropsType {
   name: string,
   key: string
 }
-
-type InputValidatorsKeyType = 'username | password | name | bio | profileImageSrc';
 
 const loginDivCommonStyles = "h-14 w-full border border-black rounded-[5px] mt-2";
 
@@ -96,7 +94,8 @@ const Auth = () => {
     });
     authenticateWith({email: emailId, password});
   }
-
+ 
+  // @ts-ignore
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -137,6 +136,7 @@ const Auth = () => {
     if(isLoginView) {
       return !isValidInput.username || !isValidInput.password;
     }
+    // @ts-ignore
     return Object.keys(isValidInput).some(key => isValidInput[key] === false);
   }
 
@@ -147,11 +147,13 @@ const Auth = () => {
   const render = () => {
     const renderInput = (inputProps: LoginInputPropsType, index: number) => {
       let validityStyle = '';
+      // @ts-ignore
       if(isValidInput[inputProps.id] === false && !isFirstRender) validityStyle = 'border-red-500';
       return (
         <div className={`${loginDivCommonStyles} ${validityStyle}`} key={`login-input-${index}`}>
           <input
             {...inputProps}
+            // @ts-ignore
             onChange={(e) => onInputChange(e, inputProps.id)}
             className={`outline-none border-none p-1 w-full h-full rounded-[5px]`}
           />

@@ -90,7 +90,7 @@ const Home = () => {
     )
   }
 
-  return (authToken !== undefined) && render();  
+  return (authToken !== undefined) ? render() : null;  
 }
 
 export default Home; 
