@@ -10,6 +10,7 @@ import { IdTokenResult } from 'firebase/auth'
 import { storeLoginDetails } from './store/actions/auth'
 import { UserProfile, fetchProfile } from './api/profile/fetchProfile'
 import { storeUserDetails } from './store/actions/user'
+import Widgets from './components/Widgets/Widgets'
 
 const Home = () => {
 
@@ -69,7 +70,7 @@ const Home = () => {
       return (<>
         <SideBar />
         <Feed />
-        {/* <Widgets/> */}
+        <Widgets/>
       </>);
     }
 

@@ -44,7 +44,7 @@ const SideBarProfile = ({
         {renderProfileDetails()}
         <ProfileStats className="border-b-gray-200 border-b" />
         <div
-          className="p-4 py-3 h-1/3 flex items-center cursor-pointer hover:bg-gray-200"
+          className="p-4 py-3 h-1/3 flex items-center cursor-pointer hover:bg-gray-200 hover:rounded-b-xl"
         >
           <img src="/my_items_icon.svg" alt="my items" className="h-5 pr-3" />
           <div className="text-sm font-bold text-gray-800">
