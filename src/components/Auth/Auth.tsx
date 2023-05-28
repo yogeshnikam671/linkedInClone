@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignInCreds, login } from "../../api/auth/login";
 import { IdTokenResult } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,8 @@ interface LoginInputPropsType {
   key: string
 }
 
+type InputValidatorsKeyType = 'username | password | name | bio | profileImageSrc';
+
 const loginDivCommonStyles = "h-14 w-full border border-black rounded-[5px] mt-2";
 
 const loginInputProps: Array<LoginInputPropsType> = [
@@ -29,14 +31,42 @@ const signUpInputProps: Array<LoginInputPropsType> = [
   ...loginInputProps
 ]
 
-// TODO - rename this to Auth since this component supports both login and signup.
-const Login = () => {
+const isUsernameValid = (username: string): boolean => {
+  const matchResult = String(username)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  return matchResult !== null;
+}
+
+const isNonEmpty = (s: string) : boolean => !!s
+
+const inputValidators = {
+  username: isUsernameValid,
+  password: isNonEmpty,
+  name: isNonEmpty,
+  bio: isNonEmpty,
+  profileImageSrc: isNonEmpty
+}
+
+const isValidInputInitialState = {
+  username: false,
+  password: false,
+  name: false,
+  bio: false,
+  profileImageSrc: false 
+}
+
+const Auth = () => {
   
   const dispatch = useDispatch();
   const storeAuthToken = (authToken:(IdTokenResult | null | undefined)) => dispatch(storeLoginDetails(authToken));
 
   const [authToken, setAuthToken] = useState(useSelector((state: any) => state.auth?.authToken));
   const [isLoginView, setIsLoginView] = useState(true);
+  const [isValidInput, setIsValidInput] = useState(isValidInputInitialState);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const authenticateWith = async (signInCreds: SignInCreds) => {
     const loginToken = isLoginView ? await login(signInCreds) : await signUp(signInCreds);
@@ -62,8 +92,7 @@ const Login = () => {
       name,
       bio,
       profileImageSrc,
-      emailId,
-      password
+      emailId
     });
     authenticateWith({email: emailId, password});
   }
@@ -75,27 +104,56 @@ const Login = () => {
     else onSignUp(formData);
   }
 
-  const onInputChange = () => {
+  const resetView = () => {
+    setIsValidInput(isValidInputInitialState);
     setAuthToken(undefined);
+    setIsFirstRender(true);
+  }
+
+  // we just have to update the inputId according to our needs e.g. inputId: 'username' | 'password'
+  const onInputChange = (e: any, inputId: 'username') => {
+    if(inputValidators[inputId]) {
+      setIsValidInput({
+        ...isValidInput,
+        [inputId]: inputValidators[inputId](e.target.value)
+      }) 
+    }
+    setAuthToken(undefined);
+    setIsFirstRender(false);
   }
   
   const onRegisterNow = () => {
-    setAuthToken(undefined);
     setIsLoginView(false);
+    resetView();
   }
 
   const onAlreadyHaveAnAccount = () => {
     setIsLoginView(true);
+    resetView();
+  }
+
+  const shouldDisableSubmitButton = () => {
+    if(isFirstRender) return false;
+    if(isLoginView) {
+      return !isValidInput.username || !isValidInput.password;
+    }
+    return Object.keys(isValidInput).some(key => isValidInput[key] === false);
+  }
+
+  const getTryAgainMessage = () => {
+    return isLoginView ? 'Invalid credentials, Try again.' : 'Please enter valid details.'
   }
 
   const render = () => {
     const renderInput = (inputProps: LoginInputPropsType, index: number) => {
+      let validityStyle = '';
+      if(isValidInput[inputProps.id] === false && !isFirstRender) validityStyle = 'border-red-500';
       return (
-        <div className={loginDivCommonStyles} key={`login-input-${index}`}>
+        <div className={`${loginDivCommonStyles} ${validityStyle}`} key={`login-input-${index}`}>
           <input
             {...inputProps}
-            onChange={onInputChange}
-            className="outline-none border-none p-1 w-full h-full rounded-[5px]"
+            onChange={(e) => onInputChange(e, inputProps.id)}
+            className={`outline-none border-none p-1 w-full h-full rounded-[5px]`}
           />
         </div>
       );
@@ -117,8 +175,9 @@ const Login = () => {
             : signUpInputProps.map((props, index) => renderInput(props, index))
           }
           <button
-            className={`${loginDivCommonStyles} flex justify-center py-1 bg-[#0074b1] text-white border-none`}
+            className={`${loginDivCommonStyles} flex justify-center py-1 bg-[#0074b1] text-white border-none disabled:bg-gray-400`}
             type="submit"
+            disabled={shouldDisableSubmitButton()}
           >
             <p className="pt-2">
               { isLoginView ? "Sign in" : "Sign up" }
@@ -126,7 +185,7 @@ const Login = () => {
           </button>
         </form>
         <div className="text-center mt-1 mb-2 text-sm text-red-600 h-2">
-          {authToken === null ? 'Invalid credentials, Try again.' : ''}
+          {authToken === null ? getTryAgainMessage() : ''}
         </div>
         {isLoginView ?
           <div className="text-center mt-1 text-sm h-2">
@@ -155,4 +214,4 @@ const Login = () => {
   return render();   
 }
 
-export default Login;
+export default Auth;

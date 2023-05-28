@@ -7,6 +7,7 @@ export interface SignInCreds {
 }
 
 export const login = async (creds: SignInCreds): Promise<IdTokenResult | null> => {
+  if(creds.email === '' || creds.password === '') return null;
   try {
     const auth = await signInWithEmailAndPassword(fireAuth, creds.email, creds.password);
     const token = await auth.user.getIdTokenResult();

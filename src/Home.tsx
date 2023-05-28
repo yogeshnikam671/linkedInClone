@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Feed from './components/Feed/Feed'
 import Header from './components/Header/Header'
-import Login from './components/Login/Login'
+import Auth from './components/Auth/Auth'
 import SideBar from './components/SideBar/SideBar'
 import { useDispatch, useSelector } from 'react-redux'
 import { sessionStorageItem } from './constants/sessionStorageItem'
@@ -76,7 +76,7 @@ const Home = () => {
 
     const renderLogin = () => {
       return (!authToken) && (<>
-        <Login/>
+        <Auth/>
       </>);
     }
 
